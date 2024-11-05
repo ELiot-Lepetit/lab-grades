@@ -328,3 +328,60 @@ top_students |>
   knitr::kable()
 ```
 
+
+## Question 17
+
+```{r}
+ggplot(final_grades, aes(x = factor(group), y = final_grade)) +
+  geom_boxplot() +
+  stat_summary(fun = mean, geom = "point", color = "red", size = 2) +
+  labs(
+    title = "Distribution of Final Grades by Group with Mean Points",
+    x = "Group",
+    y = "Final Grade"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+The boxplot shows the distribution of final grades across different groups, with red points indicating the mean final grade for each group. Most groups have median grades between 10 and 11. Group 8 has the highest mean and group 6 has the lowest mean. 
+
+
+## Question 18
+First, we check if each student has an average grade of at least 5 in all courses : 
+```{r}
+students_passing_courses <- average_grades_wide |> 
+  rowwise() |> 
+  mutate(course_pass = all(c_across(`Ancient Magic and Mysticism`:`Swordsmanship and Martial Arts`) >= 5, na.rm = TRUE)) |> 
+  ungroup()
+```
+
+Then we define the courses in each module and add the module average: 
+```{r}
+module_1_courses <- c("Elemental Mastery and Control", "History of the Arcane", "Illusion and Enchantment", 
+                      "Necromancy and Spirit Summoning", "Potion Brewing and Herbology", "Runecrafting and Glyphwork", "Swordsmanship and Martial Arts")
+module_2_courses <- c("Ancient Magic and Mysticism", "Celestial Navigation and Astronomy", "Dragon Lore and Taming")
+
+students_with_modules <- students_passing_courses |> 
+  rowwise() |> 
+  mutate(
+    module_1_avg = mean(c_across(all_of(module_1_courses)), na.rm = TRUE),
+    module_2_avg = mean(c_across(all_of(module_2_courses)), na.rm = TRUE),
+    modules_pass = module_1_avg >= 10 & module_2_avg >= 10,
+    final_grade = mean(c_across(`Ancient Magic and Mysticism`:`Swordsmanship and Martial Arts`), na.rm = TRUE)  # Calculate final grade
+  ) |> 
+  ungroup()
+```
+
+Finally, we can determine final pass status based on both conditions : 
+```{r}
+final_pass_status <- students_with_modules |> 
+  mutate(pass = course_pass & modules_pass) |> 
+  select(id, group, final_grade, pass)
+```
+
+```{r}
+final_pass_status |> 
+  knitr::kable()
+```
+
