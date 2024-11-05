@@ -4,6 +4,7 @@ author: "Eliot Lepetit"
 format: html
 ---
 
+github link : https://github.com/ELiot-Lepetit/lab-grades.git
 
 ```{r}
 #| message: false
