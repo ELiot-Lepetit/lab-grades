@@ -274,3 +274,37 @@ correlation_by_group |>
   knitr::kable()
 ```
 
+## Question 15
+
+We first identify the group with the highest correlation between the two courses: 
+```{r}
+group_max_corr <- correlation_by_group |> 
+  filter(abs(correlation) == max(abs(correlation))) |> 
+  pull(group)
+```
+Thus, we keep group `r group_max_corr`.
+
+```{r}
+strongest_group_data <- average_grades_wide |> 
+  filter(group == group_max_corr) |> 
+  select(id, `History of the Arcane`, `Elemental Mastery and Control`)
+```
+
+```{r}
+# Plot the grades for the group with the strongest correlation
+ggplot(strongest_group_data, aes(x = `Elemental Mastery and Control`, y = `History of the Arcane`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") + 
+  labs(
+    title = paste("Grades in History of the Arcane vs. Elemental Mastery and Control for Group", group_max_corr),
+    x = "Average Grade in Elemental Mastery and Control",
+    y = "Average Grade in History of the Arcane"
+  ) +
+  theme_minimal()
+```
+
+Once again, I added the regression line (here with a slope of approcimately -0.40)
+
+
+
+
