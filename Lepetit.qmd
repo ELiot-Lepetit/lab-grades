@@ -99,3 +99,17 @@ ggplot(elemental_grades, aes(x = group, y = avg_grade)) +
 ```
 
 ## Question 7) 
+
+```{r}
+ggplot(grades, aes(x = factor(module), y = grade)) +
+  geom_boxplot() +
+  labs(
+    title = "Grade Distribution by Module",
+    x = "Module",
+    y = "Grade"
+  )
+```
+Module 1 has a slightly higher median grade. Moreover, Module 2 displays more outliers, showing that it has more extreme grades at both ends of the scale. Finally, Module 2 has the slightly shorter IQR so the middle 50% of grades are more tightly clustered around the median compared to Module 1.
+
+
+
