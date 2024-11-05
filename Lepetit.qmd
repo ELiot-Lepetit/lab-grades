@@ -382,6 +382,7 @@ final_pass_status <- students_with_modules |>
 
 ```{r}
 final_pass_status |> 
+  slice_head(n = 5) |>
   knitr::kable()
 ```
 
