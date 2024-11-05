@@ -24,4 +24,20 @@ grades <- vroom(here("grades.csv"))
 ```
 
 
-2) 
+2) The data set contains `r nrow(grades)` grades.
+
+
+3) 
+
+```{r}
+num_students <- grades |> 
+  distinct(id) |>
+  nrow()
+```
+
+There are  `r num_students` students
+
+
+
+
+
