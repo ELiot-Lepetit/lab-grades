@@ -248,3 +248,29 @@ ggplot(grades_comparison, aes(x = `Celestial Navigation and Astronomy`, y = `His
 In this plot we can observe a slight correlation between having good grades in history of the Arcane and in Celestial navigation and Astronomy courses. However, we cannot affirm there is a causality because there could be an ommision variable biais (eg. if the student spends more time studying). 
 
 
+## Question 14
+
+We first make sure there is no NAs : 
+```{r}
+ average_grades_wide |> 
+  select(`History of the Arcane`, `Elemental Mastery and Control`) |> 
+  summarise_all(~ any(is.na(.))) 
+```
+
+
+```{r}
+correlation_by_group <- average_grades_wide |> 
+  select(id, group, `History of the Arcane`, `Elemental Mastery and Control`) |> 
+  group_by(group) |> 
+  summarise(
+    correlation = cor(`History of the Arcane`, `Elemental Mastery and Control`),
+    .groups = 'drop'
+  )
+```
+
+Finally, we can display the correlation by group: 
+```{r}
+correlation_by_group |> 
+  knitr::kable()
+```
+
