@@ -7,7 +7,7 @@ format: html
 
 ```{r}
 #| message: false
-here::i_am("git-101-2024.Rproj")
+here::i_am("lab-grades.Rproj")
 library(here)
 library(vroom)
 library(ggplot2)
@@ -17,11 +17,11 @@ library(tidyr)
 theme_set(theme_bw())
 ```
 
-
+1) Loading the dataset
 ```{r}
 #| message: false
-white_wine <- vroom(here("data", "winequality-white.csv"))
+grades <- vroom(here("grades.csv"))
 ```
 
 
-
+2) 
