@@ -306,5 +306,25 @@ ggplot(strongest_group_data, aes(x = `Elemental Mastery and Control`, y = `Histo
 Once again, I added the regression line (here with a slope of approcimately -0.40)
 
 
+## Question 16
+We first compute the final grade for each students : 
+```{r}
+final_grades <- average_grades_wide |> 
+  rowwise() |> 
+  mutate(final_grade = mean(c_across(starts_with("Ancient Magic"):last_col()), na.rm = TRUE)) |> 
+  ungroup() |> 
+  select(id, group, final_grade)
+```
 
+We can display the five best students: 
+```{r}
+top_students <- final_grades |> 
+  arrange(desc(final_grade)) |> 
+  slice_head(n = 5)
+```
+
+```{r}
+top_students |>
+  knitr::kable()
+```
 
