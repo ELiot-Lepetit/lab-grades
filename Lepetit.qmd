@@ -16,18 +16,21 @@ library(tidyr)
 
 theme_set(theme_bw())
 ```
+# Introduction
 
-1) Loading the dataset
+## Question 1) 
+Loading the dataset
 ```{r}
 #| message: false
 grades <- vroom(here("grades.csv"))
 ```
 
+# Simple analysis
 
-2) The data set contains `r nrow(grades)` grades.
+## Question 2) 
+The data set contains `r nrow(grades)` grades.
 
-
-3) 
+## Question 3) 
 
 ```{r}
 num_students <- grades |> 
@@ -37,7 +40,7 @@ num_students <- grades |>
 
 There are  `r num_students` students
 
-4)
+## Question 4)
 ```{r}
 students <- grades |> 
   select(id, group) |>
@@ -51,7 +54,7 @@ students |>
 ```
 
 
-5) 
+## Question 5) 
 
 ```{r}
 students_per_group <- students |> 
@@ -71,3 +74,28 @@ ggplot(students_per_group, aes(x = group, y = num_students)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+## Question 6) 
+
+Filter for "Elemental Mastery and Control" and calculate the average grade per group : 
+```{r}
+elemental_grades <- grades |> 
+  filter(course == "Elemental Mastery and Control") |> 
+  group_by(group) |> 
+  summarise(avg_grade = mean(grade, na.rm = TRUE))
+```
+ 
+Plot for each group
+```{r}
+ggplot(elemental_grades, aes(x = group, y = avg_grade)) +
+  geom_col() +
+  geom_text(aes(label = round(avg_grade, 1)), vjust = -0.5, size = 3) + 
+  labs(
+    title = "Average Grades in Elemental Mastery and Control by Group",
+    x = "Group",
+    y = "Average Grade",
+    caption = "Note: All values have been rounded to one decimal place."
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Question 7) 
