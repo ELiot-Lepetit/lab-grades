@@ -141,3 +141,19 @@ grades_per_student |>
   knitr::kable()
 ```
 
+
+## Question 9 
+
+We display the first 5 rows of the data frame that contains the student's ids, their group and the number of grades they obtained in Ancient Magic and Mysticism course.
+```{r}
+grades |> 
+  filter(course == "Ancient Magic and Mysticism") |> 
+  group_by(id, group) |> 
+  summarise(num_grades = n(), .groups = 'drop') |>
+  slice_head(n = 5) |> 
+  knitr::kable()
+```
+
+## Question 10
+
+
