@@ -199,5 +199,52 @@ ggplot(average_grades_per_group, aes(x = factor(group), y = avg_grades)) +
 We cannot see a huge difference inbetween groups, this indicates that the number of grades a student has at the end of the course does not depend on which group he is part of.
 
 
+# Grade analysis
+
 ## Question 12
+We first calculate the average grade per course for each student
+```{r}
+average_grades <- grades |> 
+  group_by(id, group, course) |> 
+  summarise(avg_grade = mean(grade, na.rm = TRUE), .groups = 'drop')
+
+```
+
+Then we pivot to wide format such taht each course as a separate column
+```{r}
+average_grades_wide <- average_grades |> 
+  pivot_wider(names_from = course, values_from = avg_grade)
+```
+
+Finally we only keep the variables we're interested in, for example we can keep "Ancient Magic and Mysticism" and "Celestial Navigation and Astronomy" courses: 
+```{r}
+average_grades_wide |> 
+  select(id, group, `Ancient Magic and Mysticism`, `Celestial Navigation and Astronomy`) |> 
+  slice_head(n = 5) |> 
+  knitr::kable()
+```
+
+
+## Question 13
+```{r}
+# Filter the wide data to keep only the relevant columns for the two courses
+grades_comparison <- average_grades_wide |> 
+  select(id, group, `History of the Arcane`, `Celestial Navigation and Astronomy`) |> 
+  drop_na(`History of the Arcane`, `Celestial Navigation and Astronomy`)
+
+```
+
+```{r}
+ggplot(grades_comparison, aes(x = `Celestial Navigation and Astronomy`, y = `History of the Arcane`)) +
+  geom_point(alpha = .5) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") + 
+  labs(
+    title = "Comparison of Average Grades: History of the Arcane vs. Celestial Navigation and Astronomy",
+    x = "Average Grade in Celestial Navigation and Astronomy",
+    y = "Average Grade in History of the Arcane"
+  ) +
+  theme_minimal()
+```
+In this plot we can observe a slight correlation between having good grades in history of the Arcane and in Celestial navigation and Astronomy courses. However, we cannot affirm there is a causality because there could be an ommision variable biais (eg. if the student spends more time studying). 
+
 
