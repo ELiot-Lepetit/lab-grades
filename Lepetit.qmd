@@ -144,16 +144,37 @@ grades_per_student |>
 
 ## Question 9 
 
-We display the first 5 rows of the data frame that contains the student's ids, their group and the number of grades they obtained in Ancient Magic and Mysticism course.
 ```{r}
-grades |> 
+ancient_magic_grades <- grades |> 
   filter(course == "Ancient Magic and Mysticism") |> 
   group_by(id, group) |> 
-  summarise(num_grades = n(), .groups = 'drop') |>
+  summarise(num_grades = n(), .groups = 'drop')
+```
+
+We display the first 5 rows of the data frame that contains the student's ids, their group and the number of grades they obtained in Ancient Magic and Mysticism course.
+```{r}
+ancient_magic_grades|>
   slice_head(n = 5) |> 
   knitr::kable()
 ```
 
 ## Question 10
+
+```{r}
+grade_distrib <- ancient_magic_grades |> 
+  count(num_grades) 
+```
+
+```{r}
+ggplot(grade_distrib, aes(x = num_grades, y = n)) +
+  geom_col() +
+  geom_text(aes(label = n), vjust = -0.5, size = 3) + 
+  labs(
+    title = "Distribution of Number of Grades in Ancient Magic and Mysticism",
+    x = "Number of Grades",
+    y = "Number of Students"
+  )
+```
+
 
 
