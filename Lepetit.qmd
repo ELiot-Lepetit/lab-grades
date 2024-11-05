@@ -1,0 +1,27 @@
+---
+title: "Lepetit"
+author: "Eliot Lepetit"
+format: html
+---
+
+
+```{r}
+#| message: false
+here::i_am("git-101-2024.Rproj")
+library(here)
+library(vroom)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+theme_set(theme_bw())
+```
+
+
+```{r}
+#| message: false
+white_wine <- vroom(here("data", "winequality-white.csv"))
+```
+
+
+
