@@ -18,7 +18,7 @@ theme_set(theme_bw())
 ```
 # Introduction
 
-## Question 1) 
+## Question 1 
 Loading the dataset
 ```{r}
 #| message: false
@@ -27,10 +27,10 @@ grades <- vroom(here("grades.csv"))
 
 # Simple analysis
 
-## Question 2) 
+## Question 2
 The data set contains `r nrow(grades)` grades.
 
-## Question 3) 
+## Question 3 
 
 ```{r}
 num_students <- grades |> 
@@ -40,13 +40,14 @@ num_students <- grades |>
 
 There are  `r num_students` students
 
-## Question 4)
+## Question 4
 ```{r}
 students <- grades |> 
   select(id, group) |>
   distinct(id, group)
 ```
 
+We display the 5 bottom rows of the table
 ```{r}
 students |>
   slice_tail(n = 5) |>
@@ -54,7 +55,7 @@ students |>
 ```
 
 
-## Question 5) 
+## Question 5
 
 ```{r}
 students_per_group <- students |> 
@@ -74,7 +75,7 @@ ggplot(students_per_group, aes(x = group, y = num_students)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Question 6) 
+## Question 6 
 
 Filter for "Elemental Mastery and Control" and calculate the average grade per group : 
 ```{r}
@@ -98,7 +99,7 @@ ggplot(elemental_grades, aes(x = group, y = avg_grade)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Question 7) 
+## Question 7
 
 ```{r}
 ggplot(grades, aes(x = factor(module), y = grade)) +
@@ -112,4 +113,31 @@ ggplot(grades, aes(x = factor(module), y = grade)) +
 Module 1 has a slightly higher median grade. Moreover, Module 2 displays more outliers, showing that it has more extreme grades at both ends of the scale. Finally, Module 2 has the slightly shorter IQR so the middle 50% of grades are more tightly clustered around the median compared to Module 1.
 
 
+# Attendance analysis
+
+## Question 8
+```{r}
+grades_per_student <- grades |> 
+  group_by(id, group) |> 
+  summarise(num_grades = n(), .groups = 'drop')
+```
+
+This time let's show the first 5 rows of the resulting table
+```{r}
+grades_per_student |> 
+  slice_head(n = 5) |> 
+  knitr::kable()
+```
+
+Finally, here is a table of the minimum, maximum, average and median number of grades per student.
+```{r}
+grades_per_student |> 
+  summarise(
+    min_grades = min(num_grades),
+    max_grades = max(num_grades),
+    avg_grades = mean(num_grades),
+    median_grades = median(num_grades)
+  ) |>
+  knitr::kable()
+```
 
